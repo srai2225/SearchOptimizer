@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './App.css';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -10,11 +11,11 @@ function App() {
       const response = await fetch('http://127.0.0.1:8000/semantic-search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: query }) // <-- FIXED HERE
+        body: JSON.stringify({ query })  // ✅ Fixed key
       });
 
       if (!response.ok) {
-        throw new Error('Request failed');
+        throw new Error('Search request failed');
       }
 
       const data = await response.json();
@@ -27,25 +28,30 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Semantic Search</h1>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search something..."
-      />
-      <button onClick={handleSearch}>Search</button>
+    <div className="app-container">
+      <nav className="navbar">
+        <div className="logo">Flipkart Grid</div>
+        <div className="search-bar">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search for products..."
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+      </nav>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
-      <ul>
+      <div className="grid-container">
         {results.map((item, index) => (
-          <li key={index}>
-            <strong>{item.title}</strong>: {item.description}
-          </li>
+          <div key={index} className="product-card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
