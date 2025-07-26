@@ -11,11 +11,11 @@ function App() {
       const response = await fetch('http://127.0.0.1:8000/semantic-search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query })  // ✅ Fixed key
       });
 
       if (!response.ok) {
-        throw new Error('Request failed');
+        throw new Error('Search request failed');
       }
 
       const data = await response.json();
@@ -28,27 +28,27 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <header className="navbar">
+    <div className="app-container">
+      <nav className="navbar">
         <div className="logo">Flipkart Grid</div>
         <div className="search-bar">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for products, brands and more"
+            placeholder="Search for products..."
           />
           <button onClick={handleSearch}>Search</button>
         </div>
-      </header>
+      </nav>
 
       {error && <p className="error">{error}</p>}
 
-      <div className="results-grid">
+      <div className="grid-container">
         {results.map((item, index) => (
-          <div key={index} className="card">
-            <div className="title">{item.title}</div>
-            <div className="desc">{item.description}</div>
+          <div key={index} className="product-card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
           </div>
         ))}
       </div>
